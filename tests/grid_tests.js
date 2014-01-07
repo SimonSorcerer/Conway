@@ -39,15 +39,12 @@ define(["Grid", "config", "jasmine-html"], function(Grid, config) {
         });
 
         it("throws an exception on reading out of grid boundaries", function() {
-            var grid = new Grid(5, 5);
-
-            var actual = function() {
+            var functionCall = function() {
                 grid.get(20, 20);
             };
 
-            expect(actual).toThrow();
+            expect(functionCall).toThrow();
         });
-
     });
 
     describe("Grid set function", function() {
@@ -58,11 +55,11 @@ define(["Grid", "config", "jasmine-html"], function(Grid, config) {
         });
 
         it("throws an exception on setting value out of grid boundaries", function () {
-            var actual = function() {
+            var functionCall = function() {
                 grid.set(20, 20, config.state.alive);
             };
 
-            expect(actual).toThrow();
+            expect(functionCall).toThrow();
         });
     });
 });
