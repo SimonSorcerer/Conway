@@ -1,4 +1,4 @@
-define(["Grid", "config", "jasmine-html"], function(Grid, config) {
+define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, helper) {
     describe("New Grid by default", function() {
         var grid;
 
@@ -15,17 +15,21 @@ define(["Grid", "config", "jasmine-html"], function(Grid, config) {
         });
 
         it("is initialized with default value", function () {
-            for (var i = 0; i < grid.size().x; i++) {
-                for (var j = 0; j < grid.size().y; j++) {
-                    var value = grid.get(i, j);
+            var i, j, actual;
 
-                    expect(value).toBe(config.defaults.grid.state);
+            for (i = 0; i < grid.size().x; i++) {
+                for (j = 0; j < grid.size().y; j++) {
+                    actual = grid.get(i, j);
+
+                    expect(actual).toBe(config.defaults.grid.state);
                 }
             }
         });
 
         it("has only one initial frame", function () {
-            var numOfFrames = grid.size().frames;
+            var numOfFrames;
+            
+            numOfFrames = grid.size().frames;
 
             expect(numOfFrames).toBe(1);
         })
@@ -38,12 +42,30 @@ define(["Grid", "config", "jasmine-html"], function(Grid, config) {
             grid = new Grid(10, 10);
         });
 
+        it("returns value on reading within grid boundaries", function () {
+            var actualFn, actual, statesArray;
+
+            actualFn = function () {
+                return grid.get(5, 5);
+            };
+
+            actual = actualFn();
+
+            statesArray = helper.simpleObjectToArray(config.constants.state);
+
+            expect(actualFn).not.toThrow();
+            expect(actual).toBeDefined();
+            expect(statesArray).toContain(actual);
+        });
+
         it("throws an exception on reading out of grid boundaries", function() {
-            var functionCall = function() {
+            var actualFn;
+
+            actualFn = function () {
                 grid.get(20, 20);
             };
 
-            expect(functionCall).toThrow();
+            expect(actualFn).toThrow();
         });
     });
 
@@ -55,11 +77,13 @@ define(["Grid", "config", "jasmine-html"], function(Grid, config) {
         });
 
         it("throws an exception on setting value out of grid boundaries", function () {
-            var functionCall = function() {
+            var actualFn;
+
+            actualFn = function () {
                 grid.set(20, 20, config.state.alive);
             };
 
-            expect(functionCall).toThrow();
+            expect(actualFn).toThrow();
         });
     });
 });
