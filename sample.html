@@ -5,6 +5,12 @@
     <script data-main="scripts/conway" src="scripts/require.min.js"></script>
 </head>
 <body>
-    <h1>My Sample Project</h1>
+    <h1>Conway</h1>
+    <div class="game" data-bind="foreach: width">
+        <div class="row" data-bind="foreach: height">
+            <div class="cell" data-bind="css: isAlive, click: switchState">
+            </div>
+        </div>
+    </div>
 </body>
 </html>

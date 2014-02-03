@@ -25,14 +25,6 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
                 }
             }
         });
-
-        it("has only one initial frame", function () {
-            var numOfFrames;
-            
-            numOfFrames = grid.size().frames;
-
-            expect(numOfFrames).toBe(1);
-        })
     });
 
     describe("Grid get function", function() {
@@ -80,10 +72,48 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
             var actualFn;
 
             actualFn = function () {
-                grid.set(20, 20, config.state.alive);
+                grid.set(20, 20, config.constants.state.alive);
             };
 
             expect(actualFn).toThrow();
+        });
+    });
+
+    describe("Grid switch function", function () {
+        var grid;
+
+        beforeEach(function () {
+            grid = new Grid(10, 10);
+        });
+
+        it("throws an exception on switching value out of grid boundaries", function () {
+            var actualFn;
+
+            actualFn = function () {
+                grid.switch(15, 15);
+            };
+
+            expect(actualFn).toThrow();
+        });
+
+        it("changes the value of grid cell from alive to dead", function () {
+            var actual;
+
+            grid.set(4, 4, config.constants.state.alive);
+            grid.switch(4, 4);
+            actual = grid.get(4, 4);
+
+            expect(actual).toBe(config.constants.state.dead);
+        });
+
+        it("changes the value of grid cell from dead to alive", function () {
+            var actual;
+
+            grid.set(6, 6, config.constants.state.dead);
+            grid.switch(6, 6);
+            actual = grid.get(6, 6);
+
+            expect(actual).toBe(config.constants.state.alive);
         });
     });
 });

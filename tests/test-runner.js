@@ -16,7 +16,7 @@ requirejs.config({
     }
 });
 
-require(["jasmine-html", "tests/grid_tests"], function(jasmine) {
+require(["jasmine-html", "tests/grid_tests", "tests/history_tests"], function(jasmine) {
     var jasmineEnv = jasmine.getEnv();
 
     jasmineEnv.addReporter(
