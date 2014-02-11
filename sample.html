@@ -9,7 +9,7 @@
     <h1>Conway</h1>
     <div class="game" data-bind="foreach: grid">
         <div class="row" data-bind="foreach: $data, as: item">
-            <div class="cell" data-bind="css: { alive: $data, dead: !$data}">
+            <div class="cell" data-bind="css: { alive: $data.value, dead: !$data.value}, click: $root.switchState">
             </div>
         </div>
     </div>

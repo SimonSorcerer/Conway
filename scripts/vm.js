@@ -1,4 +1,4 @@
-﻿define(["knockout", "config", "grid"], function (ko, config, Grid) {
+﻿define(["knockout", "config", "grid", "history", "rules"], function (ko, config, Grid, History, rules) {
     return function VM() {
         var width, height, grid,
             self = this;
@@ -13,16 +13,23 @@
         }
 
         self.grid = ko.computed(function () {
-            var result = [];
+            var result = [], cell;
 
             for (var i = 0; i < width; i++) {
                 result.push([]);
 
                 for (var j = 0; j < height; j++) {
+                    cell = {
+                        x: i,
+                        y: j,
+                        value: grid.get(i, j)
+                    };
+
                     if (i * j % 5 === 1) {
-                        result[i].push(!grid.get(i, j));
+                        cell.value = !cell.value;
+                        result[i].push(cell);
                     } else {
-                        result[i].push(grid.get(i, j));
+                        result[i].push(cell);
                     }
                 }
             }
@@ -30,10 +37,8 @@
             return result;
         });
 
-        self.click = function (cell) {
-            return ko.computed(function () {
-                cell.switch(cell.x, cell.y);
-            });
+        self.switchState = function (cell) {
+            grid.switchState(cell.x, cell.y);
         }
     };
 });

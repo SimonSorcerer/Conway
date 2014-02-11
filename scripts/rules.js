@@ -1,5 +1,5 @@
 define(["config"], function(config) {
-    var rules;
+    var rules = {};
 
     rules.underPopulation = function(state, liveNeighbors) {
         if (liveNeighbors < 2) {
