@@ -1,11 +1,8 @@
-﻿define("History", ["config", "Grid"], function (config, Grid) {
-    var self,
-        history;
+﻿define(["config", "Grid"], function (config, Grid) {
 
-    // constructor
-    // -------------------------------
-    function History(initialGrid) {
-        self = this;
+    return function History(initialGrid) {
+        var self = this,
+            history;
 
         if (!initialGrid) {
             throw new Exception("History requires grid on initialization!");
@@ -13,62 +10,60 @@
 
         history = new Array(initialGrid);
         console.log("History initializated");
-    }
 
-    // prototype methods
-    // -------------------------------
-    History.prototype.get = function (time) {
-        if (time < 0 || time >= self.age()) {
-            throw new Exception("Reading history above boundaries!");
-        }
+        // methods
+        // -------------------------------
+        function get(time) {
+            if (time < 0 || time >= age()) {
+                throw new Exception("Reading history above boundaries!");
+            }
 
-        return history[time];
-    };
+            return history[time];
+        };
 
-    History.prototype.generateNext = function (rules) {
-        var state, neighbors, grid;
-        
-        grid = initNextState();
+        function generateNext(rules) {
+            var state, neighbors, grid;
 
-        for (var i = 0; i < rules.length; i++) {
-            for (var j = 0; j < grid.size.height ; j++) {
-                for (var k = 0; k < grid.size.width ; k++) {
-                    state = grid.get(k, j);
-                    neighbors = grid.liveNeighbors(k, j);
+            grid = initNextState();
 
-                    grid.set(k, j, rules[i](state, neighbors));
+            for (var i = 0; i < rules.length; i++) {
+                for (var j = 0; j < grid.size.height ; j++) {
+                    for (var k = 0; k < grid.size.width ; k++) {
+                        state = grid.get(k, j);
+                        neighbors = grid.liveNeighbors(k, j);
+
+                        grid.set(k, j, rules[i](state, neighbors));
+                    }
                 }
             }
+        };
+
+         function age() {
+            return history.length;
+        };
+
+        function getLatestState() {
+            if (history && history.length > 0) {
+                return history[history.length - 1];
+            }
+
+            throw new Exception("History not initialized!");
         }
-    };
 
-    History.prototype.age = function () {
-        return history.length;
-    };
+        function initNextState() {
+            var newGrid;
 
-    // private methods
-    // -------------------------------
+            newGrid = new Grid();
+            newGrid.clone(getLatestState());
 
-    var getLatestState = function () {
-        if (history && history.length > 0) {
-            return history[history.length - 1];
+            history.push(newGrid);
+            return newGrid;
+        };
+
+        return {
+            get: get,
+            next: generateNext,
+            age: age
         }
-
-        throw new Exception("History not initialized!");
     }
-
-    var initNextState = function () {
-        var newGrid;
-
-        newGrid = new Grid();
-        newGrid.clone(getLatestState());
-
-        history.push(newGrid);
-        return newGrid;
-    };
-
-    // module instance
-    // -------------------------------
-
-    return History;
 });

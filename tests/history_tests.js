@@ -28,9 +28,10 @@
             actualFn = function () {
                 actual = history.get(0);
             };
-
+            
             expect(actualFn).not.toThrow();
-            expect(actual).toBe(gridMock);
+            expect(actual).not.toBeUndefined();
+            expect(actual).toEqual(gridMock);
         });
 
         it("throws an error on reading out of history boundaries", function () {
@@ -58,14 +59,14 @@
             var oldAge, newAge;
 
             oldAge = history.age();
-            history.generateNext(rulesMock);
+            history.next(rulesMock);
             newAge = history.age();
 
             expect(newAge).toEqual(oldAge + 1);
         });
 
         it("doesn't change existing grid history", function () {
-            history.generateNext(rulesMock);
+            history.next(rulesMock);
         });
     });
 });

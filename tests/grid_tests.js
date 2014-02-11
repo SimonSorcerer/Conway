@@ -7,8 +7,8 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
         });
 
         it("is initialized with default width and height", function () {
-            var width = grid.size().x,
-                height = grid.size().y;
+            var width = grid.size.x,
+                height = grid.size.y;
 
             expect(width).toBe(config.defaults.grid.width);
             expect(height).toBe(config.defaults.grid.height);
@@ -17,8 +17,8 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
         it("is initialized with default value", function () {
             var i, j, actual;
 
-            for (i = 0; i < grid.size().x; i++) {
-                for (j = 0; j < grid.size().y; j++) {
+            for (i = 0; i < grid.size.x; i++) {
+                for (j = 0; j < grid.size.y; j++) {
                     actual = grid.get(i, j);
 
                     expect(actual).toBe(config.defaults.grid.state);
@@ -90,7 +90,7 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
             var actualFn;
 
             actualFn = function () {
-                grid.switch(15, 15);
+                grid.switchState(15, 15);
             };
 
             expect(actualFn).toThrow();
@@ -100,7 +100,7 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
             var actual;
 
             grid.set(4, 4, config.constants.state.alive);
-            grid.switch(4, 4);
+            grid.switchState(4, 4);
             actual = grid.get(4, 4);
 
             expect(actual).toBe(config.constants.state.dead);
@@ -110,7 +110,7 @@ define(["Grid", "config", "helper", "jasmine-html"], function(Grid, config, help
             var actual;
 
             grid.set(6, 6, config.constants.state.dead);
-            grid.switch(6, 6);
+            grid.switchState(6, 6);
             actual = grid.get(6, 6);
 
             expect(actual).toBe(config.constants.state.alive);

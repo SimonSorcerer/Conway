@@ -1,0 +1,22 @@
+﻿body {
+}
+.game {
+}
+
+.row {
+    clear: both;
+}
+
+.cell {
+    float: left;
+    width: 18px;
+    height: 18px;
+}
+
+.alive {
+    background-color: #000;
+}
+
+.dead {
+    background-color: #FFF;
+}
