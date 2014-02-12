@@ -3,6 +3,7 @@ requirejs.config({
     paths: {
         tests: '../tests/',
         jasmine: '../lib/jasmine',
+        mocks: '../tests/mocks',
         'jasmine-html': '../lib/jasmine-html'
     },
     shim: {

@@ -14,6 +14,8 @@
         // methods
         // -------------------------------
         function get(time) {
+            time = time || age() - 1;
+
             if (time < 0 || time >= age()) {
                 throw new Exception("Reading history above boundaries!");
             }
@@ -27,10 +29,10 @@
             grid = initNextState();
 
             for (var i = 0; i < rules.length; i++) {
-                for (var j = 0; j < grid.size.height ; j++) {
-                    for (var k = 0; k < grid.size.width ; k++) {
+                for (var j = 0; j < grid.size.x() ; j++) {
+                    for (var k = 0; k < grid.size.y() ; k++) {
                         state = grid.get(k, j);
-                        neighbors = grid.liveNeighbors(k, j);
+                        neighbors = grid.filterNeighbors(k, j, config.constants.state.alive);
 
                         grid.set(k, j, rules[i](state, neighbors));
                     }
@@ -46,15 +48,15 @@
             if (history && history.length > 0) {
                 return history[history.length - 1];
             }
-
             throw new Exception("History not initialized!");
         }
 
         function initNextState() {
-            var newGrid;
+            var newGrid,
+                oldGrid = getLatestState();
 
             newGrid = new Grid();
-            newGrid.clone(getLatestState());
+            newGrid.clone(oldGrid);
 
             history.push(newGrid);
             return newGrid;

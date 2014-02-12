@@ -1,4 +1,4 @@
-﻿define(["History", "config", "helper", "jasmine-html"], function (History, config, helper) {
+﻿define(["History", "Grid", "config", "helper", "mocks/gridMock", "mocks/rulesMock", "jasmine-html"], function (History, Grid, config, helper, gridMock, rulesMock) {
     describe("New History by default", function () {
         var history;
 
@@ -15,10 +15,11 @@
 
     describe("History get function", function () {
         var history,
-            gridMock = [];
+            grid;
 
         beforeEach(function () {
-            history = new History(gridMock);
+            grid = new Grid(10, 10);
+            history = new History(grid);
         });
 
         it("returns value on reading within grid boundaries", function () {
@@ -31,7 +32,7 @@
             
             expect(actualFn).not.toThrow();
             expect(actual).not.toBeUndefined();
-            expect(actual).toEqual(gridMock);
+            expect(actual).toEqual(grid);
         });
 
         it("throws an error on reading out of history boundaries", function () {
@@ -43,16 +44,26 @@
 
             expect(actualFn).toThrow();
         });
+
+        it("returns latest grid from history on undefined time argument", function () {
+            var actual;
+
+            actual = history.get();
+            expect(actual).toEqual(grid);
+
+            history.next(rulesMock);
+            actual = history.get();
+            expect(actual).not.toEqual(grid);
+        });
     });
 
 
     describe("History next function", function () {
-        var history,
-            gridMock = [[0, 0], [0, 0]],
-            rulesMock = [];
+        var history, grid;
 
         beforeEach(function () {
-            history = new History(gridMock);
+            grid = new Grid(10, 10, config.constants.state.alive);
+            history = new History(grid);
         });
 
         it("increases age of history", function () {
@@ -65,8 +76,29 @@
             expect(newAge).toEqual(oldAge + 1);
         });
 
-        it("doesn't change existing grid history", function () {
+        it("applies rules to next history grid", function () {
+            var actual, newGrid;
+
+            actual = grid.get(5, 6);
+            expect(actual).toEqual(config.constants.state.alive);
+
             history.next(rulesMock);
+            newGrid = history.get();
+
+            expect(newGrid).not.toEqual(grid);
+
+            actual = newGrid.get(5, 6);
+            expect(actual).toEqual(config.constants.state.dead);
+        });
+
+        it("doesn't change existing grid history", function () {
+            var oldGrid, newGrid;
+
+            oldGrid = history.get();
+            history.next(rulesMock);
+            newGrid = history.get();
+
+            expect(oldGrid).not.toEqual(newGrid);
         });
     });
 });

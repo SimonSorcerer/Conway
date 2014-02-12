@@ -42,18 +42,34 @@ define(["config"], function(config) {
             }
         };
 
-        function liveNeighbors(x, y) {
+        function getCopy() {
+            var result = [], newRow;
+
+            grid.forEach(function (row) {
+                newRow = row.map(function (item) {
+                    return item;
+                });
+
+                result.push(newRow);
+            });
+
+            return result;
+        };
+
+        function filterNeighbors(x, y, expected) {
             var result = 0;
 
             for (var i = -1; i <= 1; i++) {
                 for (var j = -1; j <= 1; j++) {
                     if (i == 0 && j == 0) {
-                        break;
+                        continue;
                     }
 
-                    if (self.get(x + i, y + j) == config.constants.state.alive) {
-                        result += 1;
-                    }
+                    try {
+                        if (get(x + i, y + j) === expected) {
+                            result += 1;
+                        }
+                    } catch (e) {}
                 }
             }
 
@@ -61,13 +77,7 @@ define(["config"], function(config) {
         };
 
         function clone(gridToClone) {
-            var clone = [];
-
-            grid = gridToClone.map(function (item) {
-                clone.push(item.slice(0))
-            });
-
-            return clone;
+            grid = gridToClone.getCopy();
         };
 
         // private methods
@@ -96,11 +106,13 @@ define(["config"], function(config) {
         return {
             set: set,
             get: get,
+            getCopy: getCopy,
             switchState: switchState,
+            filterNeighbors: filterNeighbors,
             clone: clone,
             size: {
-                x: getWidth(),
-                y: getHeight()
+                x: getWidth,
+                y: getHeight
             }
         }
     };
