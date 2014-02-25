@@ -1,11 +1,11 @@
 requirejs.config({
     paths: {
-        knockout: '../lib/knockout-3.0.0',
+        knockout: '../lib/knockout-3.0.0'
     },
     shim: {
         knockout: {
             exports: 'jasmine'
-        },
+        }
     }
 });
 

@@ -19,8 +19,7 @@ button {
 }
 
 .game {
-    margin: 5px;
-    margin-left: 10px;
+    margin: 5px 5px 5px 10px;
 }
 
 .row {
@@ -37,9 +36,6 @@ button {
 
 .alive {
     background-color: #000;
-}
-
-.dead {
 }
 
 .controls {

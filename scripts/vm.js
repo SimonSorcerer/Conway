@@ -30,7 +30,7 @@
         self.generateRandom = function () {
             self.init();
             self.randomLife();
-        }
+        };
 
         self.set = function (x, y, val) {
             if (val === undefined || val === null) {
@@ -40,12 +40,12 @@
             try {
                 self.grid()[x]()[y](val);
             }
-            catch (e) { };
+            catch (e) { }
         };
 
         self.get = function (x, y) {
             return self.grid()[x]()[y]();
-        }
+        };
 
         self.liveNeighbors = function (x, y) {
             var i, j, result = 0;
@@ -58,11 +58,66 @@
 
                     try {
                         result += self.get(x + i, y + j) ? 1 : 0;
-                    } catch (e) { };
+                    } catch (e) { }
                 }
             }
 
             return result;
+        };
+
+        self.next = function () {
+            var nextGrid = createTemporaryNextGrid();
+
+            copyValuesToGrid(nextGrid);
+        };
+
+        self.switch = function (obsX, obsY) {
+            var oldValue, x = obsX(), y = obsY();
+
+            oldValue = self.get(x, y);
+            self.set(x, y, !oldValue);
+        };
+
+        self.play = function () {
+            var timeout = 500 / self.speed();
+
+            self.isPlaying(true);
+            timerId = setInterval(self.next, timeout);
+        };
+
+        self.stop = function () {
+            self.isPlaying(false);
+            clearInterval(timerId);
+        };
+
+        self.speed.subscribe(function () {
+            var speed = self.speed(),
+                isPlaying = self.isPlaying();
+
+            if (isNaN(speed)) {
+                self.speed(5);
+            }
+            else if (speed < 1) {
+                self.speed(1);
+            }
+            else if (speed > 10) {
+                self.speed(10);
+            }
+
+            if (isPlaying) {
+                self.stop();
+                self.play();
+            }
+        });
+
+        self.randomLife = function () {
+            var i, j;
+
+            for (i = 0; i < self.size(); i++) {
+                for (j = 0; j < self.size(); j++) {
+                    self.set(i, j, getRandomBool());
+                }
+            }
         };
 
         function checkMaximumSize() {
@@ -89,61 +144,6 @@
             }
 
             return self.get(x, y);
-        };
-
-        self.next = function () {
-            var nextGrid = createTemporaryNextGrid();
-
-            copyValuesToGrid(nextGrid);
-        }
-
-        self.switch = function (obsX, obsY) {
-            var oldValue, x = obsX(), y = obsY();
-
-            oldValue = self.get(x, y);
-            self.set(x, y, !oldValue);
-        }
-
-        self.play = function () {
-            var timeout = 500 / self.speed();
-
-            self.isPlaying(true);
-            timerID = setInterval(self.next, timeout);
-        }
-
-        self.stop = function () {
-            self.isPlaying(false);
-            clearInterval(timerID);
-        }
-
-        self.speed.subscribe(function () {
-            var speed = self.speed(),
-                isPlaying = self.isPlaying();
-
-            if (isNaN(speed)) {
-                self.speed(5);
-            }
-            else if (speed < 1) {
-                self.speed(1);
-            }
-            else if (speed > 10) {
-                self.speed(10);
-            }
-
-            if (isPlaying) {
-                clearInterval(timerID);
-                self.play();
-            }
-        });
-
-        self.randomLife = function () {
-            var i, j;
-
-            for (i = 0; i < self.size(); i++) {
-                for (j = 0; j < self.size(); j++) {
-                    self.set(i, j, getRandomBool());
-                }
-            }
         }
 
         function createTemporaryNextGrid() {
