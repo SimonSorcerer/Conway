@@ -1,6 +1,26 @@
 ﻿body {
+    font: bold 10pt verdana;
 }
+input, button {
+    font: normal 10pt verdana;
+}
+
+input {
+    border: 1px solid #808080;
+    background-color: #f7f7f7;
+    width: 60px;
+    line-height: 14pt;
+    color: #570101;
+    font-weight: bold;
+}
+
+button {
+    line-height: 14pt;
+}
+
 .game {
+    margin: 5px;
+    margin-left: 10px;
 }
 
 .row {
@@ -11,6 +31,8 @@
     float: left;
     width: 18px;
     height: 18px;
+    background-color: #eee;
+    margin: 0 1px 1px 0;
 }
 
 .alive {
@@ -18,5 +40,12 @@
 }
 
 .dead {
-    background-color: #FFF;
+}
+
+.controls {
+    clear: both;
+}
+.controls div, .controls button {
+    float: left;
+    margin: 5px;
 }

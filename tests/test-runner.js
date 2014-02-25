@@ -4,7 +4,8 @@ requirejs.config({
         tests: '../tests/',
         jasmine: '../lib/jasmine',
         mocks: '../tests/mocks',
-        'jasmine-html': '../lib/jasmine-html'
+        'jasmine-html': '../lib/jasmine-html',
+        knockout: '../lib/knockout-3.0.0'
     },
     shim: {
         jasmine: {
@@ -17,7 +18,7 @@ requirejs.config({
     }
 });
 
-require(["jasmine-html", "tests/grid_tests", "tests/history_tests"], function(jasmine) {
+require(["jasmine-html", "tests/grid_tests"], function(jasmine) {
     var jasmineEnv = jasmine.getEnv();
 
     jasmineEnv.addReporter(

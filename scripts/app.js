@@ -10,5 +10,8 @@ requirejs.config({
 });
 
 require(["knockout", "vm"], function (ko, VM) {
-    ko.applyBindings(new VM());
+    var vm = new VM();
+
+    vm.generateRandom();
+    ko.applyBindings(vm);
 });

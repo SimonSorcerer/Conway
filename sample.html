@@ -6,10 +6,23 @@
     <link href="style/basic.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>Conway</h1>
+    <div class="controls">
+        <div>
+            Grid size: <input type="text" data-bind="value: size" />
+        </div>
+        <button class="btn" data-bind="click: generateRandom">Generate</button>
+    </div>
+    <div class="controls">
+        <div>
+            Speed: <input type="text" data-bind="value: speed" />
+        </div>
+        <button class="btn green" data-bind="click: play, visible: isStopped">Play</button>
+        <button class="btn red" data-bind="click: stop, visible: isPlaying">Stop</button>
+    </div>
+
     <div class="game" data-bind="foreach: grid">
         <div class="row" data-bind="foreach: $data, as: item">
-            <div class="cell" data-bind="css: { alive: $data, dead: !$data}, click: $root.switchState">
+            <div class="cell" data-bind="css: { alive: $data, dead: !$data}, click: function() { $root.switch($parentContext.$index, $index); }">
             </div>
         </div>
     </div>
